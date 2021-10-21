@@ -36,3 +36,9 @@ lerna-debug.log*
 
 # env
 .env
+
+# dataset 
+*data*
+
+# dist
+*dist*
