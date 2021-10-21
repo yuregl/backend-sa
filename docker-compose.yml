@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  api-aftersale:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-aftersale
+    command: bash -c "yarn && yarn start:dev"
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - '.:/app'
+    depends_on:
+      - mongodb
+    networks:
+      rede:
+        ipv4_address: 12.7.1.11
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - './data:/data/db'
+    networks:
+      rede:
+        ipv4_address: 12.7.1.13
+networks:
+  rede:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 12.7.1.1/16
