@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 
 import config from '../config/config';
-import { Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class ProductsService {
