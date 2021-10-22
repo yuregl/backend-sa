@@ -17,7 +17,7 @@ class Config {
     this.mongoUrl = process.env.MONGO_URL;
     this.secret = process.env.SECRET;
     this.expiresIn = process.env.EXPIRES_IN;
-    this.shopifyKey = process.env.SHOPIFY_KEY_API;
+    this.shopifyKey = process.env.SHOPIFY_KEY;
     this.shopifyPassword = process.env.SHOPIFY_PASSWORD;
     this.shopifyUrl = `${process.env.SHOPIFY_URL}`;
     this.salt = process.env.SALT;
