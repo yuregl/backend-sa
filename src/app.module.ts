@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import Config from './config/config';
 import { HttpModule } from '@nestjs/axios';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { HttpModule } from '@nestjs/axios';
     AuthModule,
     ProductsModule,
     HttpModule,
+    FavoritesModule,
   ],
   controllers: [],
   providers: [],
