@@ -22,51 +22,60 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Estrutura do projeto
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este projeto está estruturado com base no padrão MVC. Todos os arquivos que contém tanto a lógica de negócios quanto os testes de unidade de services podem ser encontrados na pasta 'src'.
 
-## Installation
+## Depêdencias
 
-```bash
-$ npm install
-```
+- [Yarn](https://yarnpkg.com/)
+- [Mongo](https://www.mongodb.com/pt-br)
+- [Docker](https://www.docker.com/)
 
-## Running the app
+## Variaveis de ambiente
 
-```bash
-# development
-$ npm run start
+- PORT= #Porta utilizada para iniciar o serviço
+- MONGO_URL= #URL do banco
+- SECRET= #Valor para auxiliar na criaçao do token
+- EXPIRES_IN= #Tempo de expiração do token
+- SHOPIFY_KEY= #Chave da shopify
+- SHOPIFY_PASSWORD= #Senha da shopify
+- SHOPIFY_URL= #URL da shopify
+- SALT= #quantidade de saltos para fazer hash da senha
 
-# watch mode
-$ npm run start:dev
+## Instalação com docker no Linux
 
-# production mode
-$ npm run start:prod
-```
+1. Instale o docker e o docker-compose
 
-## Test
+2. clone este repositório:
 
-```bash
-# unit tests
-$ npm run test
+   ```shell
+     git clone
+     cd backend-as
+   ```
 
-# e2e tests
-$ npm run test:e2e
+3. Crie um arquivo chamado .env com o conteúdo de `.env.example` e preencha os campos:
 
-# test coverage
-$ npm run test:cov
-```
+   ```shell
+    cp .env.example .env
+    vi .env
+   ```
 
-## Support
+4. Crie e levante o container usando o `docker-compose`:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   ```shell
+     docker-compose up  -d
+   ```
 
-## Stay in touch
+5. Testes
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   ```shell
+     yarn test
+   ```
+
+6. Para acessar o serviço `http://localhost:${PORT}`
+
+7. Para acessar a documentação `http://localhost:${PORT}/api`
 
 ## License
 
