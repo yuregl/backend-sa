@@ -50,7 +50,7 @@ Este projeto está estruturado com base no padrão MVC. Todos os arquivos que co
 2. clone este repositório:
 
    ```shell
-     git clone
+     git clone https://github.com/yuregl/backend-sa.git
      cd backend-as
    ```
 
