@@ -4,7 +4,9 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocumnet } from './entities/user.entity';
+import { FavoriteDto } from '../favorites/dto/create-favorite.dto';
 import * as bcrypt from 'bcrypt';
+import { Types } from 'mongoose';
 
 import config from '../config/config';
 
@@ -37,6 +39,52 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return await this.userModel.findOne({ email }).exec();
+  }
+
+  async addFavoriteProduct({ userId, productId }: FavoriteDto) {
+    const result = await this.userModel.updateOne(
+      { _id: userId },
+      { $push: { favoritesProducts: productId } },
+    );
+    return result;
+  }
+
+  async isAlreadyFavorite({ userId, productId }: FavoriteDto) {
+    const result = await this.userModel.aggregate([
+      {
+        $match: {
+          _id: new Types.ObjectId(userId),
+        },
+      },
+      {
+        $unwind: {
+          path: '$favoritesProducts',
+        },
+      },
+      {
+        $match: {
+          favoritesProducts: productId,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          favoritesProducts: 1,
+          username: 1,
+          email: 1,
+        },
+      },
+    ]);
+    return result;
+  }
+
+  async removeFavorite({ userId, productId }: FavoriteDto) {
+    const result = await this.userModel.updateOne(
+      { _id: new Types.ObjectId(userId) },
+      { $pull: { favoritesProducts: { $in: [productId] } } },
+    );
+
+    return result.modifiedCount;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
