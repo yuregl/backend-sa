@@ -1,26 +1,66 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { HttpException, Injectable } from '@nestjs/common';
+import { FavoriteDto } from './dto/create-favorite.dto';
+import { ProductsService } from '../products/products.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class FavoritesService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
+  constructor(
+    private productsService: ProductsService,
+    private usersService: UsersService,
+  ) {}
+  async createFavorite(createFavoriteDto: FavoriteDto) {
+    const { products } = await this.productsService.findAll();
+    const findProduct = products.find(
+      (element: any) => `${element.id}` === createFavoriteDto.productId,
+    );
+
+    if (findProduct === undefined) {
+      throw new HttpException('This product does not exist', 404);
+    }
+
+    const isAlreadyFavorite = await this.usersService.isAlreadyFavorite(
+      createFavoriteDto,
+    );
+
+    if (isAlreadyFavorite.length > 0) {
+      throw new HttpException('The product is already favorited', 409);
+    }
+
+    await this.usersService.addFavoriteProduct(createFavoriteDto);
+
+    return { message: 'A product was favorited' };
   }
 
-  findAll() {
-    return `This action returns all favorites`;
+  async removeFavorite(removeFavorite: FavoriteDto) {
+    const isAlreadyFavorite = await this.usersService.isAlreadyFavorite(
+      removeFavorite,
+    );
+
+    if (isAlreadyFavorite.length === 0) {
+      throw new HttpException('This product has not been favorited', 404);
+    }
+
+    await this.usersService.removeFavorite(removeFavorite);
+    return { message: 'The product was successfully disfavored' };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
-  }
+  async listUserFavorite(userId: string) {
+    const user = await this.usersService.findOne(userId);
+    const Products = [];
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
-  }
+    if (user === null) {
+      throw new HttpException('The user was not found', 404);
+    }
+    const { favoritesProducts } = user;
 
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+    favoritesProducts.forEach((element: string) => {
+      const result = this.productsService.getProduct(element);
+      Products.push(result);
+    });
+
+    const listProducts = await Promise.all(Products);
+
+    return listProducts;
   }
 }
