@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -34,6 +34,9 @@ export class UsersService {
 
   async findOne(id: string) {
     const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new HttpException('User does not exist', 404);
+    }
     return user;
   }
 
