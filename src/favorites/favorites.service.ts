@@ -2,6 +2,8 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { FavoriteDto } from './dto/create-favorite.dto';
 import { ProductsService } from '../products/products.service';
 import { UsersService } from 'src/users/users.service';
+import { Mail } from '../email/Email';
+import config from '../config/config';
 
 @Injectable()
 export class FavoritesService {
@@ -28,6 +30,17 @@ export class FavoritesService {
     }
 
     await this.usersService.addFavoriteProduct(createFavoriteDto);
+    const { email } = await this.usersService.findOne(createFavoriteDto.userId);
+    const resultProducts = await this.listUserFavorite(
+      createFavoriteDto.userId,
+    );
+    const newMail = new Mail();
+    newMail.to = email;
+    newMail.subject = 'List of favorite products';
+    newMail.message = `Added ${JSON.stringify(resultProducts)}`;
+    setTimeout(function () {
+      newMail.sendMail();
+    }, config.timeInterval);
 
     return { message: 'A product was favorited' };
   }
@@ -42,6 +55,15 @@ export class FavoritesService {
     }
 
     await this.usersService.removeFavorite(removeFavorite);
+    const { email } = await this.usersService.findOne(removeFavorite.userId);
+    const resultProducts = await this.listUserFavorite(removeFavorite.userId);
+    const newMail = new Mail();
+    newMail.to = email;
+    newMail.subject = 'List of favorite products';
+    newMail.message = `remove ${JSON.stringify(resultProducts)}`;
+    setTimeout(function () {
+      newMail.sendMail();
+    }, config.timeInterval);
     return { message: 'The product was successfully disfavored' };
   }
 
