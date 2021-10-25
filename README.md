@@ -41,7 +41,11 @@ Este projeto está estruturado com base no padrão MVC. Todos os arquivos que co
 - SHOPIFY_KEY= #Chave da shopify
 - SHOPIFY_PASSWORD= #Senha da shopify
 - SHOPIFY_URL= #URL da shopify
-- SALT= #quantidade de saltos para fazer hash da senha
+- SALT= #Quantidade de saltos para fazer hash da senha
+- SERVICE_SMTP= #Serviço utilizado para o envio de email
+- USER_SMTP= #Email de usuário
+- PASSWORD_SMTP= #Senha de usuário
+- TIME_INTERVAL= #Tempo para envio de emails
 
 ## Instalação com docker no Linux
 
